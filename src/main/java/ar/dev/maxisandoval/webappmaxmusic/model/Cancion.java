@@ -1,9 +1,14 @@
 package ar.dev.maxisandoval.webappmaxmusic.model;
 
 import jakarta.persistence.*;
+import lombok.*;
 import java.math.BigDecimal;
 
 @Entity
+@Data //toString, equals, hashcode, getters y setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Cancion {
 
     @Id
