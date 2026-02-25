@@ -7,7 +7,6 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
@@ -32,7 +31,6 @@ public class CancionService {
     @Modifying
     public void eliminarCancion(Long id) {
         Cancion cancion = cancionRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Cancion no encontrada"));
-
         cancionRepository.delete(cancion);
     }
 
