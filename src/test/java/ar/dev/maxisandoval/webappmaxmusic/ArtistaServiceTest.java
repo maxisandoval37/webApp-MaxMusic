@@ -8,7 +8,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
 import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -37,6 +36,27 @@ class ArtistaServiceTest {
         assertNotNull(artistaGuardado.getEmail());
         assertNotNull(artistaGuardado.getFechaNacimiento());
         assertNotNull(artistaGuardado.getNacionalidad());
+    }
+
+    @Test
+    void testListarArtistas() {
+        assertFalse(artistaService.listarArtistas().isEmpty());
+    }
+
+    @Test
+    void testObtenerArtistaPorId() {
+        Artista artista = artistaService.obtenerArtistaPorId(artistaGuardado.getId());
+
+        assertNotNull(artista);
+        assertEquals(artistaGuardado.getId(), artista.getId());
+    }
+
+    @Test
+    void testObtenerArtistaPorId_inexistente() {
+        Long idInexistente = Long.MAX_VALUE;
+
+        RuntimeException ex = assertThrows(RuntimeException.class, () -> artistaService.obtenerArtistaPorId(idInexistente));
+        assertTrue(ex.getMessage().contains("No se encontró el artista con el id: "));
     }
 
 }

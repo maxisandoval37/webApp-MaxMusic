@@ -2,14 +2,12 @@ package ar.dev.maxisandoval.webappmaxmusic.service;
 
 import ar.dev.maxisandoval.webappmaxmusic.model.Album;
 import ar.dev.maxisandoval.webappmaxmusic.model.Artista;
-import ar.dev.maxisandoval.webappmaxmusic.model.Cancion;
 import ar.dev.maxisandoval.webappmaxmusic.repository.AlbumRepository;
 import ar.dev.maxisandoval.webappmaxmusic.repository.ArtistaRepository;
 import ar.dev.maxisandoval.webappmaxmusic.repository.CancionRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -21,9 +19,12 @@ public class AlbumService {
     private ArtistaRepository artistaRepository;
     private CancionRepository cancionRepository;
 
-
-    public Album obtenerAlbum(Long id) {
+    public Album obtenerAlbumPorId(Long id) {
         return albumRepository.findById(id).orElseThrow(() -> new RuntimeException("No se encontró el album con el id: "+id));
+    }
+
+    public List<Album> listarAlbumes() {
+        return albumRepository.findByAllByOrderByTituloIgnoreCaseAsc();
     }
 
     public void eliminarAlbum(Long id) {
