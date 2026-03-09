@@ -27,7 +27,7 @@ public class CancionService {
     }
 
     public Cancion guardarCancion(Cancion cancion, Long albumId) {
-        Album album = albumRepository.findById(albumId).orElseThrow(() -> new EntityNotFoundException("Cancion no encontrada"));
+        Album album = albumRepository.findById(albumId).orElseThrow(() -> new EntityNotFoundException("Album no encontrado"));
         cancion.setAlbum(album);
 
         return cancionRepository.save(cancion);
