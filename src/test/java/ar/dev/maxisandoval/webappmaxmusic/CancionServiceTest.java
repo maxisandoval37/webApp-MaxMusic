@@ -46,7 +46,7 @@ class CancionServiceTest {
         cancion.setDuracion(BigDecimal.valueOf(faker.number().numberBetween(1, 1000)));
         cancion.setAlbum(albumGuardado);
 
-        cancionGuardada = cancionService.guardarCancion(cancion);
+        cancionGuardada = cancionService.guardarCancion(cancion, albumGuardado.getId());
     }
 
     @Test

@@ -93,8 +93,8 @@ class AlbumServiceTest {
     void actualizarAlbum_conCanciones_ok() {
         Album guardado = albumService.guardarAlbum(albumBase, artistaGuardado.getId(), null);
 
-        Cancion c1 = cancionService.guardarCancion(crearCancionValida(guardado));
-        Cancion c2 = cancionService.guardarCancion(crearCancionValida(guardado));
+        Cancion c1 = cancionService.guardarCancion(crearCancionValida(guardado), 1L);
+        Cancion c2 = cancionService.guardarCancion(crearCancionValida(guardado), 1L);
 
         Album albumActualizada = Album.builder()
                 .titulo(guardado.getTitulo())
