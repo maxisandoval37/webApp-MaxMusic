@@ -1,6 +1,8 @@
 package ar.dev.maxisandoval.webappmaxmusic.service;
 
+import ar.dev.maxisandoval.webappmaxmusic.model.Album;
 import ar.dev.maxisandoval.webappmaxmusic.model.Cancion;
+import ar.dev.maxisandoval.webappmaxmusic.repository.AlbumRepository;
 import ar.dev.maxisandoval.webappmaxmusic.repository.CancionRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -14,6 +16,7 @@ import java.util.List;
 public class CancionService {
 
     CancionRepository cancionRepository;
+    AlbumRepository albumRepository;
 
     public Cancion obtenerCancionPorId(Long id) {
         return cancionRepository.findById(id).orElseThrow(() -> new RuntimeException("No se encontró la canción con el id: "+id));
@@ -23,7 +26,10 @@ public class CancionService {
         return cancionRepository.findAll();
     }
 
-    public Cancion guardarCancion(Cancion cancion) {
+    public Cancion guardarCancion(Cancion cancion, Long albumId) {
+        Album album = albumRepository.findById(albumId).orElseThrow(() -> new EntityNotFoundException("Cancion no encontrada"));
+        cancion.setAlbum(album);
+
         return cancionRepository.save(cancion);
     }
 

@@ -45,6 +45,7 @@ public class AlbumViewController {
     public String mostrarFormularioActualizarAlbum(@PathVariable Long id, Model model) {
         model.addAttribute("album", albumService.obtenerAlbumPorId(id));
         model.addAttribute("canciones", cancionService.listarCanciones());
+        model.addAttribute("artistas", artistaService.listarArtistas());
 
         return "actualizarAlbumForm";
     }
