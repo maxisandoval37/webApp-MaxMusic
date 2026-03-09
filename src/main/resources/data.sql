@@ -21,7 +21,7 @@ INSERT INTO Cancion (nombre, duracion, album_id) VALUES
                                                      ('Cancion 8', 134.00, 2);
 
 INSERT INTO Cancion (nombre, duracion, album_id) VALUES
-                                                     ('Cancion 1', 188.00, 3),
-                                                     ('Cancion 2', 128.00, 3),
-                                                     ('Cancion 3', 184.00, 3),
-                                                     ('Cancion 4', 134.00, 3);
+                                                     ('Cancion 9', 188.00, 3),
+                                                     ('Cancion 10', 128.00, 3),
+                                                     ('Cancion 11', 184.00, 3),
+                                                     ('Cancion 12', 134.00, 3);
