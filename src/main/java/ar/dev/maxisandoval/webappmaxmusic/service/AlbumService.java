@@ -1,15 +1,14 @@
 package ar.dev.maxisandoval.webappmaxmusic.service;
 
-import ar.dev.maxisandoval.webappmaxmusic.model.Album;
-import ar.dev.maxisandoval.webappmaxmusic.model.Artista;
+import ar.dev.maxisandoval.webappmaxmusic.model.*;
 import ar.dev.maxisandoval.webappmaxmusic.repository.AlbumRepository;
 import ar.dev.maxisandoval.webappmaxmusic.repository.ArtistaRepository;
 import ar.dev.maxisandoval.webappmaxmusic.repository.CancionRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -30,51 +29,57 @@ public class AlbumService {
     public void eliminarAlbum(Long id) {
         Album album = albumRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Album no encontrado"));
         albumRepository.delete(album);
-        //albumRepository.deleteById(id);
     }
 
+    //-un Album tiene muchas Canciones
+    //-una Cancion tiene un solo Album
+    //Cuando guardamos un album, seleccionando una canción de otro album, se reemplaza
+    @Transactional
     public Album guardarAlbum(Album album, Long idArtista, List<Long> idCanciones) {
         Artista artista = artistaRepository.findById(idArtista).orElseThrow(() ->
                 new RuntimeException("No se encontró el artista con el id: "+idArtista+" al momento de guardar el album"));
 
         album.setArtista(artista);
 
-        if (idCanciones != null) {
-            album.setCanciones(cancionRepository.findAllById(idCanciones));
+        if (idCanciones != null && !idCanciones.isEmpty()) {
+            List<Cancion> canciones = cancionRepository.findAllById(idCanciones);
+
+            for (Cancion cancion : canciones) {
+                cancion.setAlbum(album);
+                album.getCanciones().add(cancion);
+            }
         }
 
         return albumRepository.save(album);
     }
 
+    //Conserva las canciones que tenía, y agrega seleccionadas. Las canciones seleccionadas, si están
+    //en uso por otro album, desaparecen del segundo album (las "mueve")
+    @Transactional
     public void actualizarAlbum(Long idAlbum, Album albumActualizado, Long idArtista, List<Long> idCanciones) {
-        Optional<Album> albumOptional = albumRepository.findById(idAlbum);
+        Album albumExistente = albumRepository.findById(idAlbum)
+                .orElseThrow(() -> new RuntimeException(
+                        "No se encontró el álbum con id: " + idAlbum));
 
         Artista artista = artistaRepository.findById(idArtista).orElseThrow(() ->
                 new RuntimeException("No se encontró el artista con el id: "+idArtista+" al momento de actualizar el album"));
 
-        albumActualizado.setArtista(artista);
+        albumExistente.setTitulo(albumActualizado.getTitulo());
+        albumExistente.setGenero(albumActualizado.getGenero());
+        albumExistente.setFechaEstreno(albumActualizado.getFechaEstreno());
+        albumExistente.setArtista(artista);
 
-        if (idCanciones != null) {
-            albumActualizado.setCanciones(cancionRepository.findAllById(idCanciones));
+        if (idCanciones != null && !idCanciones.isEmpty()) {
+            List<Cancion> cancionesNuevas = cancionRepository.findAllById(idCanciones);
+
+            for (Cancion cancion : cancionesNuevas) {
+                if (!albumExistente.getCanciones().contains(cancion)) {
+                    cancion.setAlbum(albumExistente);
+                    albumExistente.getCanciones().add(cancion);
+                }
+            }
         }
 
-        Album albumAcoplado = construirAlbumActualizacion(albumActualizado, albumOptional);
-        albumRepository.save(albumAcoplado);
-    }
-
-    private Album construirAlbumActualizacion(Album albumActualizado, Optional<Album> albumOptional) {
-        Album.AlbumBuilder albumBuilder = Album.builder();
-
-        albumOptional.ifPresent(albumExistente -> {
-            albumBuilder
-                    .id(albumExistente.getId())
-                    .titulo(albumActualizado.getTitulo())
-                    .genero(albumActualizado.getGenero())
-                    .fechaEstreno(albumActualizado.getFechaEstreno())
-                    .artista(albumActualizado.getArtista())
-                    .canciones(albumActualizado.getCanciones());
-        });
-
-        return albumBuilder.build();
+        albumRepository.save(albumExistente);
     }
 }
