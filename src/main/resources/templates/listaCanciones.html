@@ -14,15 +14,15 @@
     </tr>
     </thead>
     <tbody>
-      <tr th:each="cancion : ${canciones}">
-          <td th:text="${cancion.id}"></td>
-          <td th:text="${cancion.nombre}"></td>
-          <td th:text="${cancion.duracion}"></td>
-      </tr>
+    <!-- Aca iteramos sobre la lista de canciones y mostramos cada cancion -->
+    <tr th:each="cancion : ${canciones}">
+        <td th:text="${cancion.id}"></td>
+        <td th:text="${cancion.nombre}"></td>
+        <td th:text="${cancion.duracion}"></td>
+    </tr>
     </tbody>
 </table>
 
 <div th:replace="~{fragments/footer}"></div>
-
 </body>
 </html>

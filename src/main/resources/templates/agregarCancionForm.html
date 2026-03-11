@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:insert="~{fragments/header}"></head>
+<body class="container mt-5">
+
+<h2>Agregar Canciones</h2>
+
+<form th:action="@{/guardarCancion}" method="post" class="form">
+    <div class="form-group">
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" class="form-control" required>
+    </div>
+
+    <div class="form-group">
+        <label for="duracion">Duración:</label>
+        <input type="number" id="duracion" name="duracion" class="form-control" min="0" max="999" required>
+    </div>
+
+    <div class="form-group">
+        <label for="albumId">Álbum:</label>
+        <select id="albumId" name="albumId" class="form-control" required>
+            <option value="">Seleccione un álbum</option>
+            <option th:each="album : ${albumes}"
+                    th:value="${album.id}"
+                    th:text="${album.titulo}">
+            </option>
+        </select>
+    </div>
+
+    <br>
+
+    <button type="submit" class="btn btn-primary">Guardar Canción</button>
+</form>
+
+<div th:replace="~{fragments/footer}"></div>
+</body>
+</html>

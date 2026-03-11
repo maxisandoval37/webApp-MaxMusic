@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:insert="~{fragments/header}"></head>
+<body class="container mt-5">
+
+<h2>Agregar Album</h2>
+
+<form th:action="@{/guardarAlbum}" method="post" class="form">
+    <div class="form-group">
+        <label for="titulo">Título:</label>
+        <input type="text" id="titulo" name="titulo" class="form-control" required>
+    </div>
+
+    <div class="form-group">
+        <label for="genero">Género:</label>
+        <input type="text" id="genero" name="genero" class="form-control" required>
+    </div>
+
+    <div class="form-group">
+        <label for="fechaEstreno">Fecha de Estreno:</label>
+        <input type="date" id="fechaEstreno" name="fechaEstreno" class="form-control" min="1970-01-01" max="3000-12-31" required>
+    </div>
+
+    <!-- Lista desplegable para seleccionar el artista -->
+    <div class="form-group">
+        <label for="idArtista">Artista:</label>
+        <select class="form-control" id="idArtista" name="idArtista" required>
+            <option th:each="artista : ${artistas}" th:value="${artista.id}" th:text="${artista.email}"></option>
+        </select>
+    </div>
+
+    <!-- Lista desplegable para seleccionar las canciones-->
+    <div class="form-group">
+        <label for="idCanciones">Canciones:</label>
+        <select id="idCanciones" name="idCanciones" class="form-control" multiple>
+            <option th:each="cancion : ${canciones}" th:value="${cancion.id}" th:text="${cancion.nombre}"></option>
+        </select>
+    </div>
+
+    <br>
+
+    <button type="submit" class="btn btn-primary">Guardar Album</button>
+</form>
+
+<div th:replace="~{fragments/footer}"></div>
+</body>
+</html>
