@@ -31,4 +31,7 @@ public class Artista {
 
     @OneToMany(mappedBy = "artista", fetch = FetchType.EAGER)
     private List<Album> albumesPublicados = new ArrayList<>();
+
+    @OneToOne(mappedBy = "artista", cascade = CascadeType.ALL)
+    private Usuario usuario;
 }
