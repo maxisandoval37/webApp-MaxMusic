@@ -25,3 +25,11 @@ INSERT INTO Cancion (nombre, duracion, album_id) VALUES
                                                      ('Cancion 10', 128.00, 3),
                                                      ('Cancion 11', 184.00, 3),
                                                      ('Cancion 12', 134.00, 3);
+
+INSERT INTO usuario (username, contrasena, rol, nombre, apellido) VALUES ( 'admin', '{bcrypt}$2a$12$eyd1Muaz4ZxxZvC4nd556Ou1iaqfA/RReZagH4PpawE7Yazf9tQi6', 'ROL_ADMIN', 'José', 'Pérez');
+INSERT INTO usuario (username, contrasena, rol, nombre, apellido) VALUES ( 'lectura1', '{bcrypt}$2a$12$eyd1Muaz4ZxxZvC4nd556Ou1iaqfA/RReZagH4PpawE7Yazf9tQi6', 'ROL_LECTURA', 'Martin', 'Gomez');
+INSERT INTO usuario (username, contrasena, rol, nombre, apellido) VALUES ( 'lectura2', '{bcrypt}$2a$12$eyd1Muaz4ZxxZvC4nd556Ou1iaqfA/RReZagH4PpawE7Yazf9tQi6', 'ROL_LECTURA', 'Juan', 'Villalba');
+
+INSERT INTO usuario (username, contrasena, rol, nombre, apellido, artista_id) VALUES ( 'artista_diegoalonso', '{bcrypt}$2a$12$eyd1Muaz4ZxxZvC4nd556Ou1iaqfA/RReZagH4PpawE7Yazf9tQi6', 'ROL_ARTISTA', 'Diego', 'aaa', 1);
+INSERT INTO usuario (username, contrasena, rol, nombre, apellido, artista_id) VALUES ( 'artista_ezequielgallo', '{bcrypt}$2a$12$eyd1Muaz4ZxxZvC4nd556Ou1iaqfA/RReZagH4PpawE7Yazf9tQi6', 'ROL_ARTISTA', 'Eze', 'bbb', 2);
+INSERT INTO usuario (username, contrasena, rol, nombre, apellido, artista_id) VALUES ( 'artista_eliassanti', '{bcrypt}$2a$12$eyd1Muaz4ZxxZvC4nd556Ou1iaqfA/RReZagH4PpawE7Yazf9tQi6', 'ROL_ARTISTA', 'Elias', 'ccc', 3);
