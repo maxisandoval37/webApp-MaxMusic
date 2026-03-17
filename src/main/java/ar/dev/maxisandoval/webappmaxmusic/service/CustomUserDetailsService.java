@@ -38,7 +38,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         return User.withUsername(usuario.getUsername())
                 .password(usuario.getContrasena())
-                .authorities(List.of(new SimpleGrantedAuthority(usuario.getRol().getDeclaringClass().getName())))
+                .authorities(List.of(new SimpleGrantedAuthority(usuario.getRol().name())))
                 .build();
     }
 
