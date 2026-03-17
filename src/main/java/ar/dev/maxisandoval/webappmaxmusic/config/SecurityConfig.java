@@ -8,8 +8,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-
 import static org.springframework.boot.autoconfigure.security.servlet.PathRequest.toH2Console;
 
 @Configuration
@@ -17,28 +15,28 @@ import static org.springframework.boot.autoconfigure.security.servlet.PathReques
 @AllArgsConstructor
 public class SecurityConfig {
 
-    private final UserDetailsService detailsService;
+    private final UserDetailsService userDetailsService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-        http.csrf(csrf -> csrf.ignoringRequestMatchers(toH2Console()))
-                .userDetailsService(detailsService)
+        http.csrf(crsf -> crsf.ignoringRequestMatchers(toH2Console()))
+                .userDetailsService(userDetailsService)
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/", "registro", "/1.png").permitAll()
+                        .requestMatchers("/", "/registro", "/1.png").permitAll()
                         .requestMatchers(toH2Console()).permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(httpSecurityFormLoginConfigurer -> httpSecurityFormLoginConfigurer
                         .loginPage("/login").permitAll()
                         .defaultSuccessUrl("/albumes"))
-                //.logout(httpSecurityLogoutConfigurer -> httpSecurityLogoutConfigurer.permitAll()
-                  //      .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                    //    .logoutSuccessUrl("/login"))
-                .headers(httpSecurityHeadersConfigurer ->
-                        httpSecurityHeadersConfigurer.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin));
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/login")
+                        .permitAll()
+                )
+                .headers(header -> header.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin));
 
         return http.build();
     }
-
 }
