@@ -41,6 +41,25 @@
         <li class="nav-item">
           <a class="nav-link" th:href="@{/artistas}">Ver Artistas</a>
         </li>
+        <li class="nav-item" sec:authorize="hasAuthority('ROL_ADMIN')">
+          <a class="nav-link text-danger" th:href="@{/gestorRoles}">Gestor Roles (Panel Admin)</a>
+        </li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="fas fa-user-circle me-2"></i>
+            <span sec:authentication="principal.username"></span>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+            <li>
+              <form id="logoutForm" th:action="@{/logout}" method="post" class="d-inline">
+                <a class="dropdown-item text-danger" href="#" id="logoutBtn">
+                  <i class="fas fa-sign-out-alt"></i> Cerrar sesión
+                </a>
+              </form>
+            </li>
+          </ul>
+        </li>
 
       </ul>
     </div>
@@ -48,3 +67,23 @@
 </nav>
 
 <hr>
+
+<script>
+  <!-- Alerta cerrar sesión -->
+  document.getElementById("logoutBtn").addEventListener("click", function (event) {
+    Swal.fire({
+      title: "¿Estás seguro?",
+      text: "Se cerrará sesión",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Sí, salir",
+      cancelButtonText: "Cancelar"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        document.getElementById("logoutForm").submit();
+      }
+    });
+  });
+</script>
