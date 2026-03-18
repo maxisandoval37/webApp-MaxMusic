@@ -7,6 +7,15 @@
 
 <table class="table table-bordered">
 
+    <div hidden="hidden">
+        USUARIO AUTENTICADO:
+        <div sec:authentication="principal.username"></div>
+        <br>
+        ROLES DEL USUARIO AUTENTICADO:
+        <div sec:authentication="principal.authorities"></div>
+        <br>
+    </div>
+
     <thead>
     <tr>
         <th>ID</th>
@@ -15,7 +24,7 @@
         <th>Fecha de Estreno</th>
         <th>Artista</th>
         <th>Canciones</th>
-        <th>Acciones</th>
+        <th sec:authorize="hasAuthority('ROL_ADMIN')">Acciones</th>
     </tr>
     </thead>
     <tbody>
@@ -24,7 +33,9 @@
         <td th:text="${album.titulo}"></td>
         <td th:text="${album.genero}"></td>
         <td th:text="${album.fechaEstreno}"></td>
-        <td th:text="${album.artista.email}"></td>
+
+        <td th:text="${userService.obtenerUsuarioPorArtista(album.artista).nombre +' '+
+            userService.obtenerUsuarioPorArtista(album.artista).apellido}">
         </td>
 
         <td>
@@ -33,7 +44,7 @@
             </ul>
         </td>
         <!--Botones de eliminar y actualizar album-->
-        <td>
+        <td sec:authorize="hasAuthority('ROL_ADMIN')">
             <button th:onclick="'eliminarAlbumConfirmacion('+${album.id}+');'" class="btn btn-danger">Eliminar</button>
             <a th:href="@{/actualizarAlbum/{id}(id=${album.id})}" class="btn btn-warning">Actualizar</a>
         </td>

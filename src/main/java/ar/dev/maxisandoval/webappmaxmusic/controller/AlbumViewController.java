@@ -1,34 +1,65 @@
 package ar.dev.maxisandoval.webappmaxmusic.controller;
 
-import ar.dev.maxisandoval.webappmaxmusic.model.Album;
-import ar.dev.maxisandoval.webappmaxmusic.service.AlbumService;
-import ar.dev.maxisandoval.webappmaxmusic.service.ArtistaService;
-import ar.dev.maxisandoval.webappmaxmusic.service.CancionService;
+import ar.dev.maxisandoval.webappmaxmusic.model.*;
+import ar.dev.maxisandoval.webappmaxmusic.repository.UsuarioRepository;
+import ar.dev.maxisandoval.webappmaxmusic.service.*;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
+@Slf4j
 @Controller
 @AllArgsConstructor
 public class AlbumViewController {
 
+    private final UsuarioRepository usuarioRepository;
     private final AlbumService albumService;
+    private final ArtistaService artistaService;
     private final CancionService cancionService;
-    ArtistaService artistaService;
+    private final CustomUserDetailsService customUserDetailsService;
 
     @GetMapping("/albumes")
     public String listarAlbumes(Model model) {
-        model.addAttribute("albumes", albumService.listarAlbumes());
+        List<Album> albumes;
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        log.info(username);
+        Artista artista = usuarioRepository.findByUsername(username).getArtista();
+
+        if (artista != null) {
+            albumes = artista.getAlbumesPublicados();
+        }
+        else {
+            albumes = albumService.listarAlbumes();
+        }
+
+        mostrarRolesUsuarioActual();
+
+        model.addAttribute("albumes", albumes);
+        model.addAttribute("userService", customUserDetailsService);
 
         return "listaAlbumes";
+    }
+
+    private void mostrarRolesUsuarioActual() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        for (GrantedAuthority authority : authentication.getAuthorities()) {
+            log.info("Rol actual: " + authority.getAuthority());
+        }
     }
 
     @GetMapping("/agregarAlbum")
     public String mostrarFormularioNuevoAlbum(Model model) {
         model.addAttribute("canciones", cancionService.listarCanciones());
-        model.addAttribute("artistas", artistaService.listarArtistas());
+        model.addAttribute("usuariosConArtista", customUserDetailsService.listarUsuariosRegistradosConArtistas());
         model.addAttribute("album", new Album());
 
         return "agregarAlbumForm";
@@ -45,7 +76,7 @@ public class AlbumViewController {
     public String mostrarFormularioActualizarAlbum(@PathVariable Long id, Model model) {
         model.addAttribute("album", albumService.obtenerAlbumPorId(id));
         model.addAttribute("canciones", cancionService.listarCanciones());
-        model.addAttribute("artistas", artistaService.listarArtistas());
+        model.addAttribute("usuariosConArtista", customUserDetailsService.listarUsuariosRegistradosConArtistas());
 
         return "actualizarAlbumForm";
     }

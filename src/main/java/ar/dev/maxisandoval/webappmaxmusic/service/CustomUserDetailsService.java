@@ -89,6 +89,10 @@ public class CustomUserDetailsService implements UserDetailsService {
                 -> new UsernameNotFoundException("No se encontró el usuario con id: "+id));
     }
 
+    public Usuario obtenerUsuarioPorArtista(Artista artista) {
+        return usuarioRepository.findByArtista(artista);
+    }
+
     public void actualizarRolUsuario(Long id, String nuevoRol) {
         Usuario usuario = obtenerUsuarioPorId(id);
 

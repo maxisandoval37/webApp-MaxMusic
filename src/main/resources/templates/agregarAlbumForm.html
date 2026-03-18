@@ -25,7 +25,7 @@
     <div class="form-group">
         <label for="idArtista">Artista:</label>
         <select class="form-control" id="idArtista" name="idArtista" required>
-            <option th:each="artista : ${artistas}" th:value="${artista.id}" th:text="${artista.email}"></option>
+            <option th:each="usuario : ${usuariosConArtista}" th:value="${usuario.artista.id}" th:text="${usuario.nombre +' '+usuario.apellido}"></option>
         </select>
     </div>
 
