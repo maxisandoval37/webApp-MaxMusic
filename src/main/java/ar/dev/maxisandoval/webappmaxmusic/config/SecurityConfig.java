@@ -1,5 +1,6 @@
 package ar.dev.maxisandoval.webappmaxmusic.config;
 
+import ar.dev.maxisandoval.webappmaxmusic.model.Rol;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -8,6 +9,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
 import static org.springframework.boot.autoconfigure.security.servlet.PathRequest.toH2Console;
 
 @Configuration
@@ -24,6 +27,8 @@ public class SecurityConfig {
                 .userDetailsService(userDetailsService)
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/", "/registro", "/1.png").permitAll()
+                        .requestMatchers(("/gestorRoles")).hasAuthority(Rol.ROL_ADMIN.name())
+                        .requestMatchers(("/actualizarRolUsuario")).hasAuthority(Rol.ROL_ADMIN.name())
                         .requestMatchers(toH2Console()).permitAll()
                         .anyRequest().authenticated()
                 )

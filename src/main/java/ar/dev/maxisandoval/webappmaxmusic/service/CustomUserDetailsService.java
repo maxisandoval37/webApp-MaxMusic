@@ -64,7 +64,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         if (usuarioActual.isPresent()) {
             //Sesión activa: No permitimos eliminar el usuario que tiene la sesión actual abierta
             if (usernameActual.equals(usuarioActual.get().getUsername())) {
-                throw new IllegalArgumentException("Se se puede eliminar el usuario actualmente autenticado");
+                throw new IllegalArgumentException("NO se puede eliminar el usuario actualmente autenticado");
             }
 
             //Es artista: Borramos los albumes asociados
