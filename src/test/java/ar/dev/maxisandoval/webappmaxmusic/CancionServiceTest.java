@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-class CancionServiceTest {
+class CancionServiceTest extends BaseTest{
     private final CancionService cancionService;
     private final ArtistaRepository artistaRepository;
     private final AlbumRepository albumRepository;
