@@ -13,6 +13,7 @@ public class Cancion {
     private String nombre;
     private BigDecimal duracion;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "album_id")
     private Album album;
 }

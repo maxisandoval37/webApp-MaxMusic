@@ -18,6 +18,7 @@ public class Album {
     private Date fecha;
 
     @ManyToOne
+    @JoinColumn(name = "artista_id")
     private Artista artista;
 
     @OneToMany

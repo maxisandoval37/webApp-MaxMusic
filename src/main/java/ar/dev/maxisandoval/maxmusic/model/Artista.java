@@ -16,6 +16,6 @@ public class Artista {
     private LocalDate fechaNacimiento;
     private String email;
 
-    @OneToMany
+    @OneToMany(mappedBy = "artista", fetch = FetchType.EAGER)
     private List<Album> albumesPublicados = new ArrayList<>();
 }
