@@ -19,7 +19,6 @@ public class Album {
     private String titulo;
     private String genero;
     private LocalDate fechaEstreno;
-    private Date fecha;
 
     @ManyToOne
     @JoinColumn(name = "artista_id")
