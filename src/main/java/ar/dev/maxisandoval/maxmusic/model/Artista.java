@@ -1,10 +1,17 @@
 package ar.dev.maxisandoval.maxmusic.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.time.LocalDate;
 import java.util.*;
 
 @Entity
+@Data //toString, equals, hashcode, getters y setters
+@NoArgsConstructor
+@AllArgsConstructor
 public class Artista {
 
     @Id
