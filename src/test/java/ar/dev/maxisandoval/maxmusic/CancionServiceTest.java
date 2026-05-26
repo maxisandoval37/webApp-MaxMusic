@@ -51,6 +51,7 @@ class CancionServiceTest {
     }
 
     @Test
+    @Order(1)
     void guardarCancion() {
         assertNotNull(cancionGuardada.getId());
         assertNotNull(cancionGuardada.getAlbum());
@@ -60,12 +61,14 @@ class CancionServiceTest {
     }
 
     @Test
+    @Order(2)
     void listarCanciones() {
         List<Cancion> canciones = cancionService.listarCanciones();
         assertFalse(canciones.isEmpty());
     }
 
     @Test
+    @Order(3)
     void obtenerCancionPorId() {
         Cancion cancion = cancionService.obtenerCancionPorId(cancionGuardada.getId());
 
@@ -75,6 +78,7 @@ class CancionServiceTest {
     }
 
     @Test
+    @Order(4)
     void testObtenerTestPorIdInexistente() {
         Long idInexistente = Long.MAX_VALUE;
 
@@ -83,6 +87,7 @@ class CancionServiceTest {
     }
 
     @Test
+    @Order(5)
     void eliminarCancion() {
         Long idAEliminar = cancionGuardada.getId();
         cancionService.eliminarCancion(idAEliminar);

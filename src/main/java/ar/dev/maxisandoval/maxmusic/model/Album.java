@@ -1,8 +1,10 @@
 package ar.dev.maxisandoval.maxmusic.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.*;
-
 import java.time.LocalDate;
 import java.util.*;
 
@@ -17,8 +19,16 @@ public class Album {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
+
+    @NotBlank(message = "El titulo no puede estar en blanco")
+    @Size(min = 1, max = 50)
     private String titulo;
+
+    @NotBlank(message = "El genero no puede estar en blanco")
+    @Size(min = 1, max = 20)
     private String genero;
+
+    @NotNull(message = "La fecha de estreno no puede ser nula")
     private LocalDate fechaEstreno;
 
     @ManyToOne
