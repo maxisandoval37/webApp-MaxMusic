@@ -8,6 +8,7 @@ import java.util.*;
 
 @Entity
 @Data //toString, equals, hashcode, getters y setters
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Album {
