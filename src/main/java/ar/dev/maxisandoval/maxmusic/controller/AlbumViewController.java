@@ -1,9 +1,7 @@
 package ar.dev.maxisandoval.maxmusic.controller;
 
 import ar.dev.maxisandoval.maxmusic.model.Album;
-import ar.dev.maxisandoval.maxmusic.model.Cancion;
-import ar.dev.maxisandoval.maxmusic.service.AlbumService;
-import ar.dev.maxisandoval.maxmusic.service.CancionService;
+import ar.dev.maxisandoval.maxmusic.service.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +15,7 @@ public class AlbumViewController {
 
     private final AlbumService albumService;
     private final CancionService cancionService;
+    private final ArtistaService artistaService;
 
     @GetMapping("/albumes")
     public String listarAlbumes(Model model) {
@@ -28,6 +27,7 @@ public class AlbumViewController {
     @GetMapping("/agregarAlbum")
     public String mostrarFormularioNuevoAlbum(Model model) {
         model.addAttribute("canciones", cancionService.listarCanciones());
+        model.addAttribute("artistas", artistaService.listarArtistas());
         model.addAttribute("album", new Album());
 
         return "agregarAlbumForm";
@@ -45,11 +45,12 @@ public class AlbumViewController {
     public String mostrarFormularioActualizarAlbum(@PathVariable Long id, Model model) {
         model.addAttribute("album", albumService.obtenerAlbumPorId(id));
         model.addAttribute("canciones", cancionService.listarCanciones());
+        model.addAttribute("artistas", artistaService.listarArtistas());
 
         return "actualizarAlbumForm";
     }
 
-    @PostMapping("/ActualizarAlbum/{idAlbum}")
+    @PostMapping("/ActualizarAlbum/{idAlbum}")//TODO ver bug
     public String actualizarAlbum(@PathVariable Long idAlbum, @ModelAttribute Album albumActualizado,
                                   @RequestParam Long idArtista, @RequestParam(required = false) List<Long> idCanciones) {
 
