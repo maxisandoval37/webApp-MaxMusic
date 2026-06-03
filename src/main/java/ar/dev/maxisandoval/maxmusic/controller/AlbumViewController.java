@@ -50,7 +50,7 @@ public class AlbumViewController {
         return "actualizarAlbumForm";
     }
 
-    @PostMapping("/ActualizarAlbum/{idAlbum}")//TODO ver bug
+    @PostMapping("/actualizarAlbum/{idAlbum}")//TODO ver bug
     public String actualizarAlbum(@PathVariable Long idAlbum, @ModelAttribute Album albumActualizado,
                                   @RequestParam Long idArtista, @RequestParam(required = false) List<Long> idCanciones) {
 

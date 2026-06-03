@@ -62,7 +62,7 @@ public class AlbumService {
         Album albumExistente = albumRepository.findById(idAlbum).orElseThrow(() ->
                 new EntityNotFoundException("No se encontró el álbum con el id: "+idAlbum+" al momento de actualizar"));
 
-        Artista artista = artistaRepository.findById(idAlbum).orElseThrow(() ->
+        Artista artista = artistaRepository.findById(idArtista).orElseThrow(() ->
                 new EntityNotFoundException("No se encontró el artista con el id: "+idArtista+" al momento de actualizar"));
 
         albumExistente.setTitulo(albumActualizado.getTitulo());
