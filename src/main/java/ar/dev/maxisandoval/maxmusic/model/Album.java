@@ -36,9 +36,9 @@ public class Album {
     private Artista artista;
 
     @OneToMany(
-            mappedBy = "album",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
+            mappedBy = "album",//fk
+            cascade = CascadeType.ALL,//todas las operaciones de album, se propagan a canciones
+            orphanRemoval = true//si una canción deja de pertenecer al álbum, Hibernate la elimina
     )
     @ToString.Exclude
     private List<Cancion> canciones = new ArrayList<>();
