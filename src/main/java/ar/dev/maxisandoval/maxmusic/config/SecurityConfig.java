@@ -1,5 +1,6 @@
 package ar.dev.maxisandoval.maxmusic.config;
 
+import ar.dev.maxisandoval.maxmusic.model.Rol;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,6 +24,8 @@ public class SecurityConfig {
                 .userDetailsService(userDetailsService)
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/","/registro", "/1.png").permitAll()
+                        .requestMatchers(("/gestorRoles")).hasAuthority(Rol.ROL_ADMIN.name())
+                        .requestMatchers(("/actualizarRolUsuario")).hasAuthority(Rol.ROL_ADMIN.name())
                         .requestMatchers(toH2Console()).permitAll()
                         .anyRequest().authenticated()
                 )
