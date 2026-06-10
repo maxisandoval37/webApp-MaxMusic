@@ -14,7 +14,7 @@ import net.datafaker.Faker;
 
 @SpringBootTest
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-class ArtistaServiceTest {
+class ArtistaServiceTest extends BaseTest {
 
     private final ArtistaService artistaService;
     private Artista artistaGuardado;
