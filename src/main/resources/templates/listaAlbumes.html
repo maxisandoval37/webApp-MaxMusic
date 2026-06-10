@@ -33,7 +33,8 @@
         <td th:text="${album.titulo}"></td>
         <td th:text="${album.genero}"></td>
         <td th:text="${album.fechaEstreno}"></td>
-        <td th:text="${album.artista.email}">
+        <td th:text="${userService.obtenerUsuarioPorArtista(album.artista).nombre +' '+
+            userService.obtenerUsuarioPorArtista(album.artista).apellido}">
         </td>
 
         <td>
