@@ -4,9 +4,9 @@ import ar.dev.maxisandoval.maxmusic.model.*;
 import ar.dev.maxisandoval.maxmusic.service.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import net.datafaker.Faker;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import java.math.BigDecimal;
@@ -16,6 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
+@Slf4j
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 class AlbumServiceTest extends BaseTest {
     private final AlbumService albumService;
@@ -36,6 +37,8 @@ class AlbumServiceTest extends BaseTest {
                         .email(faker.internet().emailAddress())
                         .build()
         );
+
+        log.info("AlbumServiceTest -> "+artistaGuardado);
 
         albumBase = Album.builder()
                 .titulo(faker.book().title())
@@ -71,6 +74,18 @@ class AlbumServiceTest extends BaseTest {
     }
 
     @Test
+    void obtenerAlbumPorIdInexistente_lanzaEntityNotFoundException() {
+        Long idInexistente = Long.MAX_VALUE;
+
+        RuntimeException ex = assertThrows(
+                RuntimeException.class,
+                () -> albumService.obtenerAlbumPorId(idInexistente)
+        );
+
+        assertTrue(ex.getMessage().contains("No se encontró el album con el id: " + idInexistente));
+    }
+
+    @Test
     void actualizarAlbum_sinCanciones_ok() {
         Album guardado = albumService.guardarAlbum(albumBase, artistaGuardado.getId(), null);
 
@@ -91,7 +106,23 @@ class AlbumServiceTest extends BaseTest {
 
     @Test
     void actualizarAlbum_conCanciones_ok() {
-        assertNotNull("");
+        Album albumOrigen = albumService.guardarAlbum(albumBase, artistaGuardado.getId(), null);
+        Cancion cancion = cancionService.guardarCancion(crearCancionValida(albumOrigen), albumOrigen.getId());
+
+        Album albumDestino = Album.builder()
+                .titulo(faker.book().title())
+                .genero(faker.music().genre().toLowerCase())
+                .fechaEstreno(LocalDate.now().minusDays(faker.number().numberBetween(1, 5000)))
+                .build();
+
+        albumService.actualizarAlbum(albumOrigen.getId(), albumDestino, artistaGuardado.getId(), List.of(cancion.getId()));
+
+        Album actualizado = albumService.obtenerAlbumPorId(albumOrigen.getId());
+
+        assertEquals(albumDestino.getTitulo(), actualizado.getTitulo());
+        assertEquals(1, actualizado.getCanciones().size());
+        assertEquals(cancion.getId(), actualizado.getCanciones().get(0).getId());
+        assertEquals(actualizado.getId(), actualizado.getCanciones().get(0).getAlbum().getId());
     }
 
     @Test

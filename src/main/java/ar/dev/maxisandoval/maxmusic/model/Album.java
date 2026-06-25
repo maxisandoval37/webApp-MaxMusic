@@ -41,5 +41,6 @@ public class Album {
             orphanRemoval = true//si una canción deja de pertenecer al álbum, Hibernate la elimina
     )
     @ToString.Exclude
+    @Builder.Default
     private List<Cancion> canciones = new ArrayList<>();
 }

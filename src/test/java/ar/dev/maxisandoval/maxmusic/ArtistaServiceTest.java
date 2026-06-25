@@ -3,16 +3,20 @@ package ar.dev.maxisandoval.maxmusic;
 import ar.dev.maxisandoval.maxmusic.model.Artista;
 import ar.dev.maxisandoval.maxmusic.service.ArtistaService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import net.datafaker.Faker;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.*;
-import net.datafaker.Faker;
 
 @SpringBootTest
+@Transactional
+@Slf4j
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 class ArtistaServiceTest extends BaseTest {
 
@@ -29,16 +33,30 @@ class ArtistaServiceTest extends BaseTest {
         artista.setEmail(faker.internet().emailAddress());
 
         artistaGuardado = artistaService.guardarArtista(artista);
-        System.out.println(artista.getNacionalidad());
+        log.info("ArtistaServiceTest -> "+artista);
     }
 
     @Test
-    void testListarArtistas() {
+    void guardarArtista_ok() {
+        Faker faker = new Faker();
+        Artista artista = new Artista();
+        artista.setNacionalidad(faker.country().name().toLowerCase());
+        artista.setFechaNacimiento(LocalDate.now().minusYears(faker.number().numberBetween(18,60)));
+        artista.setEmail(faker.internet().emailAddress());
+
+        Artista guardado = artistaService.guardarArtista(artista);
+
+        assertNotNull(guardado.getId());
+        assertEquals(artista.getEmail(), guardado.getEmail());
+    }
+
+    @Test
+    void listarArtistas_ok() {
         assertFalse(artistaService.listarArtistas().isEmpty());
     }
 
     @Test
-    void testObtenerArtistaPorId() {
+    void obtenerArtistaPorId_ok() {
         Artista artista = artistaService.obtenerArtistaPorId(artistaGuardado.getId());
 
         assertNotNull(artista);
@@ -46,7 +64,7 @@ class ArtistaServiceTest extends BaseTest {
     }
 
     @Test
-    void testObtenerArtistaPorIdInexistente() {
+    void obtenerArtistaPorIdInexistente_lanzaEntityNotFoundException() {
         Long idInexistente = Long.MAX_VALUE;
 
         EntityNotFoundException ex = assertThrows(EntityNotFoundException.class, () -> artistaService.obtenerArtistaPorId(idInexistente));
